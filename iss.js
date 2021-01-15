@@ -47,6 +47,7 @@ const fetchCoordsByIP = function(ip, callback) {
 
     // inside the request callback ...
     // error can be set if there is an invalid domain, user is offline, etc.
+    // remember these callbacks go back into the nextISSTimesForMyLocation() function we passed here as an incoming param!
     if (error) {
       callback(error, null);
       return;
@@ -102,5 +103,46 @@ const fetchISSFlyOverTimes = function(coords, callback) {
   });
 };
 
+// master function to deal deal with the "waterfall" of API calls inside of fetchMyIP(), fetchCoordsByIP(), fetchISSFlyOverTimes() nested inside
+// 
+const nextISSTimesForMyLocation = function(callback) {
+
+  // call fetchMyIP() passin in the below "waterfall" callback function as its one and only paramater
+  // remember "error" and "ip" are the arguments returned from the callback inside of fetchMyIP as the two incoming paramaters of the 
+  // anon function here on line 112
+  fetchMyIP((error, ip) => {
+
+    // remember these callbacks go out to the callback function that we sent as an incoming paramater on line 113, back indo our index.js!
+    if (error) {
+      callback(error, null)
+      return;
+    }
+
+    // call and use fetchCoordsByIP function and feed it the IP address we got back from that server that "fell through" from above
+    fetchCoordsByIP(ip, (error, latLong) => {
+      
+      // remember these callbacks go out to the callback function that we sent as an incoming paramater on line 106 back indo our index.js!
+      if (error) {
+        callback(error, null)
+        return;
+      }
+
+      // call and use fetchISSFlyOverTimes function and feed it the latlongf etchCoordsByIP() returned
+      fetchISSFlyOverTimes(latLong, (error, flyoverTimes) => {
+        
+        // remember these callbacks go out to the callback function that we sent as an incoming paramater on line 106 back indo our index.js!
+        if (error) {
+          callback(error, null)
+          return;
+        }
+        
+        // bottom layer of callbacks! if all above error checks passed, return the final flyoverTimes JSON to the callback function passed in to nextISSTimesForMyLocation
+        // to be printed later
+        callback(null, flyoverTimes);
+      });
+    });  
+  });    
+};
+
 // export the function fetchMyIP to be called and used at the index
-module.exports = { fetchMyIP: fetchMyIP, fetchCoordsByIP: fetchCoordsByIP, fetchISSFlyOverTimes: fetchISSFlyOverTimes };
+module.exports = { nextISSTimesForMyLocation : nextISSTimesForMyLocation };

@@ -1,35 +1,28 @@
-const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss.js');
+const { nextISSTimesForMyLocation } = require('./iss.js');
 
-// ayoooo callback hell
-// return values error and ip in this callback function are already being handled in the backburner/event queue
-fetchMyIP((error, ip) => {
+// loop through JS object of returned fly over times of satelistes
+// const formattedDateTime = new Date(objectInResponseArr.risetime)
+// put this info together in a string at the end here
+const printPassTimes = function(flyoverTimes) {
+
+ for (const objectInResponseArr of flyoverTimes.response) {
+
+   const formattedDateTime = new Date(0);
+   formattedDateTime.setUTCSeconds(objectInResponseArr.risetime);
+   const formattedDuration = objectInResponseArr.duration;
+
+   console.log(`Next pass at ${formattedDateTime} for ${formattedDuration} seconds!`);
+ }
+}
+
+// master nextISSTimesForMyLocation() function gets called here, passing in the below arroe function as its one and only
+// argument as a callback
+nextISSTimesForMyLocation((error, flyoverTimes) => {
 
   if (error) {
     console.log("It didn't work!" , error);
     return;
   }
 
-  console.log('It worked! Returned IP:' , ip);
-  console.log(typeof ip);
-
-  // call and use fetchCoordsByIP function and feed it the IP address we got back from our server
-  fetchCoordsByIP(ip, ((error, latLong) => {
-
-    if (error) {
-      console.log("It didn't work!" , error);
-      return;
-    }
-
-    console.log(latLong);
-
-    // call and use fetchISSFlyOverTimes function and feed it the latlongf etchCoordsByIP() returned
-    fetchISSFlyOverTimes(latLong, ((error, flyoverTimes) => {
-      
-      if (error) {
-        console.log("It didn't work!" , error);
-        return;
-      }
-      console.log(flyoverTimes);
-    }));
-  }));
+  printPassTimes(flyoverTimes);
 });
