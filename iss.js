@@ -41,7 +41,6 @@ const fetchMyIP = function(callback) {
 // https://freegeoip.app/json/216.180.65.66?callback=test
 const fetchCoordsByIP = function(ip, callback) {
 
-  console.log("ip: " + ip);
   const geoLocationUrl = `https://freegeoip.app/json/${ip}`;
 
   request(geoLocationUrl, (error, response, body) => {
@@ -68,5 +67,40 @@ const fetchCoordsByIP = function(ip, callback) {
   });
 };
 
+/**
+ * Makes a single API request to retrieve upcoming ISS fly over times the for the given lat/lng coordinates.
+ * Input:
+ *   - An object with keys `latitude` and `longitude`
+ *   - A callback (to pass back an error or the array of resulting data)
+ * Returns (via Callback):
+ *   - An error, if any (nullable)
+ *   - The fly over times as an array of objects (null if error). Example:
+ *     [ { risetime: 134564234, duration: 600 }, ... ]
+ */
+const fetchISSFlyOverTimes = function(coords, callback) {
+  
+  const flyoverUrl = `http://api.open-notify.org/iss-pass.json?lat=${coords.lat}&lon=${coords.long}`;
+  
+  request(flyoverUrl, (error, response, body) => {
+
+    // inside the request callback ...
+    // error can be set if there is an invalid domain, user is offline, etc.
+    if (error) {
+      callback(error, null);
+      return;
+    }
+
+    // if a non-200 status code is sent back from the server, assume there is a server error
+    // force the error to be sent to the callback as the first incoming paramater
+    if (response.statusCode !== 200) {
+      const msg = `${response.statusCode} wasencountered when fetching IP. Response: ${body}`;
+      callback(Error(msg), null);
+      return;
+    }
+
+    callback(null, JSON.parse(body));
+  });
+};
+
 // export the function fetchMyIP to be called and used at the index
-module.exports = { fetchMyIP: fetchMyIP, fetchCoordsByIP: fetchCoordsByIP };
+module.exports = { fetchMyIP: fetchMyIP, fetchCoordsByIP: fetchCoordsByIP, fetchISSFlyOverTimes: fetchISSFlyOverTimes };

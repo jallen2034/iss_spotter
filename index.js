@@ -1,5 +1,6 @@
-const { fetchMyIP, fetchCoordsByIP } = require('./iss.js');
+const { fetchMyIP, fetchCoordsByIP, fetchISSFlyOverTimes } = require('./iss.js');
 
+// ayoooo callback hell
 // return values error and ip in this callback function are already being handled in the backburner/event queue
 fetchMyIP((error, ip) => {
 
@@ -18,7 +19,17 @@ fetchMyIP((error, ip) => {
       console.log("It didn't work!" , error);
       return;
     }
-    
+
     console.log(latLong);
+
+    // call and use fetchISSFlyOverTimes function and feed it the latlongf etchCoordsByIP() returned
+    fetchISSFlyOverTimes(latLong, ((error, flyoverTimes) => {
+      
+      if (error) {
+        console.log("It didn't work!" , error);
+        return;
+      }
+      console.log(flyoverTimes);
+    }));
   }));
 });
