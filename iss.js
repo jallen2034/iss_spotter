@@ -104,7 +104,6 @@ const fetchISSFlyOverTimes = function(coords, callback) {
 };
 
 // master function to deal deal with the "waterfall" of API calls inside of fetchMyIP(), fetchCoordsByIP(), fetchISSFlyOverTimes() nested inside
-// 
 const nextISSTimesForMyLocation = function(callback) {
 
   // call fetchMyIP() passin in the below "waterfall" callback function as its one and only paramater
