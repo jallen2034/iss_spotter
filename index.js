@@ -1,4 +1,3 @@
-// index.js
 const { fetchMyIP, fetchCoordsByIP } = require('./iss.js');
 
 // return values error and ip in this callback function are already being handled in the backburner/event queue
