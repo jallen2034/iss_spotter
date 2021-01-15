@@ -13,6 +13,12 @@ fetchMyIP((error, ip) => {
 
   // call and use fetchCoordsByIP function and feed it the IP address we got back from our server
   fetchCoordsByIP(ip, ((error, latLong) => {
+
+    if (error) {
+      console.log("It didn't work!" , error);
+      return;
+    }
+    
     console.log(latLong);
   }));
 });

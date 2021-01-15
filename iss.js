@@ -63,10 +63,10 @@ const fetchCoordsByIP = function(ip, callback) {
 
     // parse the .latitute and .long in the JSOn object returned from the.replace(/(?:\[rn])+/g, '')
     const parsedBody = JSON.parse(body);
-    const latLong = {lat: parsedBody.latitude, long: parsedBody.longitude}
+    const latLong = {lat: parsedBody.latitude, long: parsedBody.longitude};
     callback(null, latLong);
   });
-}
+};
 
 // export the function fetchMyIP to be called and used at the index
 module.exports = { fetchMyIP: fetchMyIP, fetchCoordsByIP: fetchCoordsByIP };
