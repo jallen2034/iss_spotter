@@ -1,17 +1,14 @@
 const request = require('request');
 
-/**
- * Makes a single API request to retrieve the user's IP address.
- * Input:
- *   - A callback (to pass back an error or the IP string)
- * Returns (via Callback):
- *   - An error, if any (nullable)
- *   - The IP address as a string (null if error). Example: "162.245.144.188"
- */
+// Makes a single API request to retrieve the user's IP address.Input:
+// A callback (to pass back an error or the IP string)
+// Returns (via Callback):
+// An error, if any (nullable)
+// The IP address as a string (null if error). Example: "162.245.144.188"
+// use request to fetch IP address from JSON API
 const fetchMyIP = function(callback) {
 
   const ipifyUrl = 'https://api.ipify.org?format=json';
-  // use request to fetch IP address from JSON API
   request(ipifyUrl, (error, response, body) => {
 
     // inside the request callback ...
@@ -41,10 +38,10 @@ const fetchMyIP = function(callback) {
 
 // function that makes a single API request to retrieve the user's geo location based on their IP address.
 // in the function, make the request to the API, and have it pass back the relevant (lat/lng) data as an object via callback.
+// https://freegeoip.app/json/216.180.65.66?callback=test
 const fetchCoordsByIP = function(ip, callback) {
 
   console.log("ip: " + ip);
-  // https://freegeoip.app/json/216.180.65.66?callback=test
   const geoLocationUrl = `https://freegeoip.app/json/${ip}`;
 
   request(geoLocationUrl, (error, response, body) => {
