@@ -1,8 +1,8 @@
 const { nextISSTimesForMyLocation } = require('./iss.js');
 
-// loop through JS object of returned fly over times of satelistes
-// const formattedDateTime = new Date(objectInResponseArr.risetime)
-// put this info together in a string at the end here
+/* loop through JS object of returned fly over times of satelistes
+ * const formattedDateTime = new Date(objectInResponseArr.risetime)
+ * put this info together in a string at the end here */
 const printPassTimes = function(flyoverTimes) {
 
  for (const objectInResponseArr of flyoverTimes.response) {
@@ -15,8 +15,7 @@ const printPassTimes = function(flyoverTimes) {
  }
 }
 
-// master nextISSTimesForMyLocation() function gets called here, passing in the below arroe function as its one and only
-// argument as a callback
+// master nextISSTimesForMyLocation() function called here, passing in the below arroe function as its one and only arg as a callback
 nextISSTimesForMyLocation((error, flyoverTimes) => {
 
   if (error) {
