@@ -1,16 +1,13 @@
 // iss_promised.js
 const request = require('request-promise-native');
 
-// This function should only have one line of code: its only job is to fetch the IP address from the API
-// and return it where needed
+/* This function should only have one line of code: its only job is to fetch the IP address from the API + return it where needed
+ * this returns the wntire promise object (not just the body!!!) */
 const fetchMyIP = function() {
-  // doccumentation for how this works???
-  // this returns the wntire promise object (not just the body!!!)
   return request('https://api.ipify.org?format=json');
 };
 
 const fetchCoordsByIP = function(ip) {
-  // why are we doing this here? This ip was parsed on line 33 of your previous version
   const geoLocationUrl = `https://freegeoip.app/json/${ip}`;
   return request(geoLocationUrl);
 };
